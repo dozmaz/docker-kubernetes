@@ -17,6 +17,8 @@ USER appuser
 
 WORKDIR /home/appuser
 
+VOLUME /data/springboot
+
 # Copiar solo el JAR generado
 COPY --from=build /app/build/libs/*.jar app.jar
 

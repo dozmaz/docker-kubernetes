@@ -13,9 +13,10 @@ services:
       - app-network
   mongo-express:
     image: mongo-express:latest
+    #container_name: mongo-express
     restart: always
     ports:
-      - 8081:8081
+      - "8081:8081"
     environment:
       ME_CONFIG_MONGODB_SERVER: db
       ME_CONFIG_MONGODB_PORT: 27017
