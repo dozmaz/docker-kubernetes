@@ -1,0 +1,21 @@
+# Spring Boot + Gradle
+/build/
+/.gradle/
+/.idea/
+*.iml
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*.class
+*.jar
+*.war
+*.ear
+!src/
+!build.gradle
+!settings.gradle
+!gradlew
+!gradlew.bat
+!Dockerfile
+
