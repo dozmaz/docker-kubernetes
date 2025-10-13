@@ -1,0 +1,77 @@
+<div class="container">
+  <!-- Mensajes -->
+  <div *ngIf="error" class="error">
+    {{ error }}
+    <button class="btn btn-danger" (click)="clearMessages()" style="float: right; padding: 5px 10px;">✕</button>
+  </div>
+
+  <div *ngIf="success" class="success">
+    {{ success }}
+  </div>
+
+  <!-- Formulario -->
+  <div class="card">
+    <h2>Crear nuevo Producto</h2>
+    <form class="user-form" (ngSubmit)="createProducto()">
+      <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <input
+          type="text"
+          id="nombre"
+          [(ngModel)]="newProducto.nombre"
+          name="nombre"
+          placeholder="Ingresa el nombre"
+          required>
+      </div>
+
+      <div class="form-group">
+        <label for="precio">Precio:</label>
+        <input
+          type="number"
+          id="precio"
+          [(ngModel)]="newProducto.precio"
+          name="precio"
+          placeholder="0"
+          required>
+      </div>
+
+      <div style="grid-column: 1 / -1;">
+        <button type="submit" class="btn" [disabled]="loading">
+          {{ loading ? 'Creando...' : 'Crear Producto' }}
+        </button>
+        <button type="button" class="btn" (click)="loadProductos()" [disabled]="loading">
+          Recargar Lista
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Lista de Productos -->
+  <div class="card">
+    <h2>Productos registrados ({{ productos.length }})</h2>
+
+    <div *ngIf="loading" class="loading">
+      Cargando Productos...
+    </div>
+
+    <div class="users-list" *ngIf="!loading">
+      <div *ngIf="productos.length === 0" style="text-align: center; padding: 20px; color: #999;">
+        No hay Productos registrados. Crea el primero arriba.
+      </div>
+
+      <div *ngFor="let producto of productos" class="user-item">
+        <div class="user-info">
+          <strong>#{{ producto.id }}</strong>
+          <span>{{ producto.nombre }}</span>
+          <span style="color: #666; margin-left: 15px;">{{ producto.precio }}</span>
+        </div>
+        <div class="user-actions">
+          <button class="btn btn-danger" (click)="deleteProducto(producto.id!)" [disabled]="loading">
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
