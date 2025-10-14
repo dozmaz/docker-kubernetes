@@ -2,7 +2,7 @@
 
 
 ## Título y Descripción
-* Nombre del proyecto
+* Nombre del proyecto: ABM productos
 * Descripción de la aplicación:
 
   Aplicación de gestión de productos con arquitectura de microservicios, utilizando un gateway para enrutar solicitudes, un servicio backend desarrollado en Spring Boot, una base de datos MongoDB para persistencia de datos y Redis para caching. La aplicación incluye un frontend en Angular servido a través de Nginx y un administrador de base de datos mongo-express.
@@ -88,17 +88,41 @@ La configuración ya contaba con multi-stage build, pero se optimizó aún más 
 git clone <tu-repo>
 
 # Construir imagen optimizada
-docker build -t mi-app:optimizado .
+```bash
+cd optimizado/backend
+```
+```bash
+docker build -t mi-app:baseline 
+```
+
+![img_2.png](img_2.png)
 
 # Escanear con Trivy
-trivy image mi-app:optimizado
+```bash
+trivy image mi-app:baseline  --timeout 15m 
+```
+
+![img_3.png](img_3.png)
 
 # Levantar servicios
+```bash
 docker compose up -d
+```
+
+![img_4.png](img_4.png)
 
 # Verificar salud
+```bash
 docker ps
+```
+
+![img_5.png](img_5.png)
+
+```bash
 curl http://localhost:3000/health
+```
+![img_6.png](img_6.png)
+
 7. Verificación de Seguridad
    Checklist que puedes copiar:
 
