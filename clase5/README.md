@@ -45,7 +45,7 @@ La configuración ya contaba con multi-stage build, pero se optimizó aún más 
 - **Antes**: gradle:8.14.3-jdk17-alpine   y   openjdk:17-alpine    (592MB)
 - **Después**: maven:3.9.6-eclipse-temurin-17-alpine  y   eclipse-temurin:17-jre-alpine   (252MB)
 
-![img.png](img.png)
+![img.png](screenshots/img.png)
 
 - **Beneficio**: Reducción de **~340MB** en imagen final
 
@@ -54,7 +54,7 @@ La configuración ya contaba con multi-stage build, pero se optimizó aún más 
 - **Después**: node:18-alpine (74.5MB)
 - **Beneficio**: 0% ya se utilizaba la versión alpine
 
-![img_1.png](img_1.png)
+![img_1.png](screenshots/img_1.png)
 
 ### 3. Usuario Non-Root
 - **Antes**: Ejecuta como root (riesgo de seguridad)
@@ -95,33 +95,33 @@ cd optimizado/backend
 docker build -t mi-app:baseline 
 ```
 
-![img_2.png](img_2.png)
+![img_2.png](screenshots/img_2.png)
 
 # Escanear con Trivy
 ```bash
 trivy image mi-app:baseline  --timeout 15m 
 ```
 
-![img_3.png](img_3.png)
+![img_3.png](screenshots/img_3.png)
 
 # Levantar servicios
 ```bash
 docker compose up -d
 ```
 
-![img_4.png](img_4.png)
+![img_4.png](screenshots/img_4.png)
 
 # Verificar salud
 ```bash
 docker ps
 ```
 
-![img_5.png](img_5.png)
+![img_5.png](screenshots/img_5.png)
 
 ```bash
 curl http://localhost:3000/health
 ```
-![img_6.png](img_6.png)
+![img_6.png](screenshots/img_6.png)
 
 7. Verificación de Seguridad
    Checklist que puedes copiar:
