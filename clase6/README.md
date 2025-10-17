@@ -15,8 +15,8 @@ Breve descripción (1-2 líneas) de qué hace.
 
 1. Clonar:
    ```bash
-   git clone https://github.com/tu-usuario/tu-repo.git
-   cd clase6
+   git clone https://github.com/dozmaz/docker-kubernetes.git
+   cd docker-kubernetes/clase6
    ```
 2. Desplegar:
 ```bash
