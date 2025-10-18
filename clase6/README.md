@@ -3,7 +3,8 @@
 **Curso:** Docker & Kubernetes - Clase 6
 **Estudiante:** GUIDO CUTIPA YUJRA
 
-Breve descripción (1-2 líneas) de qué hace.
+Despliega una instancia de Nginx en un clúster local con Minikube, creando un Deployment de 3 réplicas y un Service para exponer la aplicación.
+Incluye un ConfigMap para el contenido web y comandos para verificar, escalar y observar la auto-recuperación de pods.
 
 ## Stack
 
