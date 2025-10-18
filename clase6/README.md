@@ -1,6 +1,7 @@
 # NGINX con kubernetes
 
 **Curso:** Docker & Kubernetes - Clase 6
+
 **Estudiante:** GUIDO CUTIPA YUJRA
 
 Despliega una instancia de Nginx en un clúster local con Minikube, creando un Deployment de 3 réplicas y un Service para exponer la aplicación.
