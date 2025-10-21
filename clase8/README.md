@@ -1,5 +1,10 @@
 # Despliegue y pruebas - Clase 8
 
+Curso: Docker & Kubernetes - Clase 8
+
+Estudiante: GUIDO CUTIPA YUJRA
+
+
 ## a) Descripción del proyecto
 - Stack desplegado:
   - Frontend: Angular (aplicación estática servida por nginx) — deployment `frontend` / service `frontend-service`.
@@ -14,6 +19,13 @@
 ---
 
 ## b) Instrucciones de despliegue
+
+* Clonar:
+
+```bash
+git clone https://github.com/dozmaz/docker-kubernetes.git
+cd docker-kubernetes/clase8/k8s/
+```
 
 1) Iniciar Minikube y habilitar addons necesarios (desde Windows `cmd.exe` o una terminal):
 
@@ -123,6 +135,20 @@ backend-hpa   Deployment/backend   cpu: 3%/50%   2         5         2          
 
 4) Probar Ingress (ejemplo con Minikube):
 
+```bash
+kubectl get pods -n ingress-nginx
+```
+
+Resultado obtenido:
+
+```bash
+➜  k8s git:(main) ✗ kubectl get pods -n ingress-nginx
+NAME                                       READY   STATUS      RESTARTS      AGE
+ingress-nginx-admission-create-ffw89       0/1     Completed   0             22h
+ingress-nginx-admission-patch-zdfjc        0/1     Completed   0             22h
+ingress-nginx-controller-9cc49f96f-jlmft   1/1     Running     1 (14m ago)   22h
+```
+
 - Obtener IP de Minikube:
 
 ```bash
@@ -149,6 +175,106 @@ Resultado obtenido:
 curl http://192.168.49.2/api
 ```
 
+### Si no funciona probar con un portforwarding temporal:
+
+```bash
+kubectl port-forward svc/backend-service 8080:80
+```
+
+
+```bash
+curl http://localhost:8080/api
+```
+
+Resultado obtenido:
+
+```bash
+StatusCode        : 200
+StatusDescription : OK
+Content           :
+
+                    Hostname: backend-b9b5cc476-6qvpq
+
+                    Pod Information:
+                        -no pod information available-
+
+                    Server values:
+                        server_version=nginx: 1.13.3 - lua: 10008
+
+                    Request Information:
+                        client_address=127.0.0.1
+                        method...
+RawContent        : HTTP/1.1 200 OK
+                    Transfer-Encoding: chunked
+                    Connection: keep-alive
+                    Content-Type: text/plain
+                    Date: Tue, 21 Oct 2025 02:20:45 GMT
+                    Server: echoserver
+
+
+
+                    Hostname: backend-b9b5cc476-6qvpq
+
+                    Pod Infor...
+Forms             : {}
+Headers           : {[Transfer-Encoding, chunked], [Connection,
+                    keep-alive], [Content-Type, text/plain], [Date,
+                    Tue, 21 Oct 2025 02:20:45 GMT]...}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : mshtml.HTMLDocumentClass
+RawContentLength  : 504
+```
+
+
+```bash
+curl http://localhost:8080/
+```
+
+Resultado obtenido:
+
+```bash
+StatusCode        : 200
+StatusDescription : OK
+Content           :
+
+                    Hostname: backend-b9b5cc476-6qvpq
+
+                    Pod Information:
+                        -no pod information available-
+
+                    Server values:
+                        server_version=nginx: 1.13.3 - lua: 10008
+
+                    Request Information:
+                        client_address=127.0.0.1
+                        method...
+RawContent        : HTTP/1.1 200 OK
+                    Transfer-Encoding: chunked
+                    Connection: keep-alive
+                    Content-Type: text/plain
+                    Date: Tue, 21 Oct 2025 02:22:53 GMT
+                    Server: echoserver
+
+
+
+                    Hostname: backend-b9b5cc476-6qvpq
+
+                    Pod Infor...
+Forms             : {}
+Headers           : {[Transfer-Encoding, chunked], [Connection,
+                    keep-alive], [Content-Type, text/plain], [Date,
+                    Tue, 21 Oct 2025 02:22:53 GMT]...}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : mshtml.HTMLDocumentClass
+RawContentLength  : 475
+```
+
+
+
 5) Probar HPA con carga (ejemplo simple usando un Pod generador de carga):
 
 - Comprobar el HPA del backend (nombre de ejemplo `backend-hpa`):
@@ -157,17 +283,19 @@ curl http://192.168.49.2/api
 kubectl get hpa backend-hpa
 ```
 
+Resultado obtenido:
+```bash
+NAME          REFERENCE            TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+backend-hpa   Deployment/backend   cpu: 1%/50%   2         5         2          23h
+```
+
+
+
 - Crear un pod que haga peticiones continuas al backend para forzar escalado (ejemplo con busybox):
 
 ```bash
 kubectl run -it --rm load-generator --image=busybox -- /bin/sh -c "while true; do wget -q -O- http://backend-service:8080/api >/dev/null; sleep 0.1; done"
 ```
-
-Deja correr la carga durante 1-2 minutos y observa el HPA y los pods.
-
-Nota: ajusta la URL/puerto (`backend-service:8080`) según la configuración de tus Services y puertos en los manifests.
-
----
 
 ## c) Comandos de verificación
 
@@ -180,28 +308,38 @@ kubectl get hpa
 kubectl top pods
 ```
 
-- `kubectl get all` muestra deployments, pods, services y más.
-- `kubectl top pods` requiere `metrics-server` habilitado.
-
----
 
 ## d) Capturas de pantalla (recomendadas)
 
 Toma y guarda capturas que muestren lo siguiente:
 
-1. Ingress funcionando: salida de `curl http://<MINIKUBE_IP>/` y `curl http://<MINIKUBE_IP>/api`.
-2. Health probes configurados: salida de `kubectl describe pod <POD_NAME>` mostrando `Liveness` y `Readiness` probes.
+1. Ingress funcionando: salida de `curl http://localhost:8080/api` y `curl http://localhost:8080/`.
+
+![img_4.png](screenshots/img_4.png)
+
+![img_3.png](screenshots/img_3.png)
+
+![img.png](screenshots/img.png)
+
+
+2. Health probes configurados: salida de `kubectl describe pod backend-b9b5cc476-6qvpq` mostrando `Liveness` y `Readiness` probes.
+
+![img_10.png](screenshots/img_10.png)
+
 3. HPA en reposo: `kubectl get hpa` mostrando TARGETS por debajo del umbral (ej. 0%/50%).
+
+![img_6.png](screenshots/img_6.png)
+
 4. HPA escalando bajo carga: `kubectl get hpa` mostrando TARGETS > 50% y aumento en `DESIRED`.
+
+![img_7.png](screenshots/img_7.png)
+
 5. Pods escalados: `kubectl get pods` mostrando aumento de réplicas (por ejemplo de 2 a 4-5).
 
+![img_8.png](screenshots/img_8.png)
 Consejo: para la captura del `describe pod`, puedes filtrar las secciones con:
 
-```bash
-kubectl describe pod <POD_NAME> | findstr /R "Liveness Readiness"
-```
 
----
 
 ## e) Comandos de limpieza
 
@@ -209,20 +347,27 @@ Para eliminar los recursos creados por esta práctica (ajusta nombres si tus man
 
 ```bash
 kubectl delete ingress app-ingress
+```
+
+![img_11.png](screenshots/img_11.png)
+
+
+```bash
 kubectl delete hpa backend-hpa
+```
+
+![img_12.png](screenshots/img_12.png)
+
+
+```bash
 kubectl delete service frontend-service backend-service
+```
+
+![img_13.png](screenshots/img_13.png)
+
+
+```bash
 kubectl delete deployment frontend backend
 ```
 
-Si los recursos no existen con esos nombres, usa `kubectl get ingress,hpa,svc,deploy` para identificar los nombres reales y eliminarlos.
-
----
-
-## Notas finales y buenas prácticas
-- Verifica los nombres de `Service`, `Deployment` y `HPA` en tus manifiestos antes de ejecutar los comandos de prueba/limpieza.
-- Ajusta los thresholds del HPA (target CPU) y recursos requests/limits en el `Deployment` del backend para conseguir un comportamiento de escalado realista.
-- Para pruebas de carga más avanzadas considera usar herramientas como `hey`, `wrk` o `bombardier` desde un pod.
-
-Si quieres, puedo:
-- Adaptar las rutas exactas de `kubectl apply` según dónde estén tus manifests en el repo.
-- Añadir ejemplos de manifiestos o un script de `load-test` más robusto.
+![img_14.png](screenshots/img_14.png)
